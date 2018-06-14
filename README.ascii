@@ -1,0 +1,41 @@
+= An experiment with linux's memfd_create =
+
+This is configured with a version of bazel and subpar that will
+generate a valid par file, but which doesn't seem to set the zip_safe
+property (an issue that I believe is fixed in a more recent release),
+or at least doesn't extract the binary file(s) and do anything special with it.
+
+== Usage ==
+
+Install https://bazel.build/[bazel], the build system that'll be used here.
+
+Run `bazel build mysql_repl.par; bazel-bin/mysql_repl.par`.
+
+That will drop you into an interactive python repl.
+
+To see what this is doing, you'll need to copy in a copy of your
+system's libmysqlclient.so.  On an ubuntu 18.04 system, you can do
+this by running the following commands:
+
+....
+$ sudo apt install -y libmysqlclient-dev
+[...]
+$ cp /usr/lib/x86_64-linux-gnu/libmysqlclient.so.20.3.9 ./libmysqlclient.so
+....
+
+
+Once that's in place, you can build and test this (tested with python 2.7.12):
+
+....
+
+>>> clientinfo = entry("libmysqlclient.so", "__main__/libmysqlclient.so")
+>>> modinfo = entry("_mysql", "pypi__MySQL_python_1_2_5/_mysql.so")
+>>> link_a_lib("_mysql.so", modinfo[0], modinfo[1])
+
+....
+
+Once those are loaded, you'll see that you can `import MySQLdb` and if
+you run `pmap <pid>` you'll see that even though we have to put a
+symlink to the _mysql.so shim library, the libmysqlclient.so should be
+mapped from the mapping created by memfd_create, not from the OS.
+Which is really cool.

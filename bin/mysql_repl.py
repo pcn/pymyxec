@@ -66,8 +66,4 @@ def link_a_lib(lib_name, pid, fdnum):
 import code;
 code.interact(local=locals())
 
-
-# Test this with:
-# clientinfo = entry("libmysqlclient.so", "__main__/libmysqlclient.so")
-# modinfo = entry("_mysql", "pypi__MySQL_python_1_2_5/_mysql.so")
-# link_a_lib("_mysql.so", modinfo[0], modinfo[1])
+# See the README.md for usage
