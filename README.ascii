@@ -1,11 +1,11 @@
-= An experiment with linux's memfd_create =
+= An experiment with linux's memfd_create
 
 This is configured with a version of bazel and subpar that will
 generate a valid par file, but which doesn't seem to set the zip_safe
 property (an issue that I believe is fixed in a more recent release),
 or at least doesn't extract the binary file(s) and do anything special with it.
 
-== Usage ==
+== Usage 
 
 Install https://bazel.build/[bazel], the build system that'll be used here.
 
